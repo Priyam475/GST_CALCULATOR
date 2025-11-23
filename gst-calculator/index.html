@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GST Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="canvas-container"></div>
+
+    <div class="container">
+        <header>
+            <h1>GST Calculator</h1>
+            <p>Calculate Goods and Services Tax instantly</p>
+        </header>
+
+        <div class="main-content">
+            <main class="calculator-card">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="calculator">Calculator</button>
+                    <button class="tab-btn" data-tab="ai-forecast">AI Forecast ✨</button>
+                </div>
+
+                <!-- Calculator Tab -->
+                <div id="tab-calculator" class="tab-content active">
+                    <div class="input-group">
+                        <label for="amount">Amount (₹)</label>
+                        <div class="input-wrapper">
+                            <span class="currency-symbol">₹</span>
+                            <input type="number" id="amount" placeholder="Enter amount" min="0">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>GST Rate (%)</label>
+                        <div class="rate-buttons">
+                            <button class="rate-btn" data-rate="5">5%</button>
+                            <button class="rate-btn" data-rate="12">12%</button>
+                            <button class="rate-btn active" data-rate="18">18%</button>
+                            <button class="rate-btn" data-rate="28">28%</button>
+                        </div>
+                        <div class="custom-rate">
+                            <input type="number" id="custom-rate" placeholder="Custom Rate" min="0" max="100">
+                        </div>
+                    </div>
+
+                    <div class="toggles-container">
+                        <div class="toggle-group">
+                            <label>Calculation</label>
+                            <div class="toggle-buttons">
+                                <button class="type-btn active" id="btn-exclusive">Exclusive</button>
+                                <button class="type-btn" id="btn-inclusive">Inclusive</button>
+                            </div>
+                        </div>
+                        <div class="toggle-group">
+                            <label>Tax Type</label>
+                            <div class="toggle-buttons">
+                                <button class="type-btn active" id="btn-intra">Intra-State</button>
+                                <button class="type-btn" id="btn-inter">Inter-State</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results">
+                        <div class="result-item">
+                            <span class="label">Net Amount</span>
+                            <div class="value-group">
+                                <span class="value" id="net-amount">₹0.00</span>
+                                <button class="copy-btn" data-target="net-amount" title="Copy">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Breakdown Section -->
+                        <div id="breakdown-container">
+                            <div class="result-item sub-item">
+                                <span class="label">CGST (<span id="cgst-rate">9</span>%)</span>
+                                <span class="value" id="cgst-amount">₹0.00</span>
+                            </div>
+                            <div class="result-item sub-item">
+                                <span class="label">SGST (<span id="sgst-rate">9</span>%)</span>
+                                <span class="value" id="sgst-amount">₹0.00</span>
+                            </div>
+                        </div>
+                        <div class="result-item" id="igst-container" style="display: none;">
+                            <span class="label">IGST (<span id="igst-rate">18</span>%)</span>
+                            <span class="value highlight" id="igst-amount">₹0.00</span>
+                        </div>
+
+                        <div class="result-item total">
+                            <span class="label">Total Amount</span>
+                            <div class="value-group">
+                                <span class="value" id="total-amount">₹0.00</span>
+                                <button class="copy-btn" data-target="total-amount" title="Copy">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Forecast Tab -->
+                <div id="tab-ai-forecast" class="tab-content" style="display: none;">
+                    <div class="ai-header">
+                        <div class="ai-icon">✨</div>
+                        <p>Predict future prices with Neural Networks</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Category</label>
+                        <select id="ai-category" class="custom-select">
+                            <option value="electronics">Electronics (High Inflation)</option>
+                            <option value="essentials">Essentials (Stable)</option>
+                            <option value="luxury">Luxury (Volatile)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Timeframe (Years)</label>
+                        <input type="range" id="ai-years" min="1" max="5" value="1" class="slider">
+                        <div class="range-value"><span id="ai-years-val">1</span> Year(s)</div>
+                    </div>
+
+                    <button id="btn-predict" class="action-btn">
+                        <span>Run AI Prediction</span>
+                    </button>
+
+                    <div id="ai-loading" class="ai-loading" style="display: none;">
+                        <div class="loader"></div>
+                        <span>Training Model & Predicting...</span>
+                    </div>
+
+                    <div id="ai-result" class="ai-result" style="display: none;">
+                        <div class="prediction-card">
+                            <div class="pred-row">
+                                <span class="label">Future Price</span>
+                                <span class="value" id="pred-price">₹0.00</span>
+                            </div>
+                            <div class="pred-row">
+                                <span class="label">Inflation Impact</span>
+                                <span class="value highlight" id="pred-inflation">+0%</span>
+                            </div>
+                            <div class="pred-row">
+                                <span class="label">GST Outlook</span>
+                                <span class="value" id="pred-gst">Stable</span>
+                            </div>
+                        </div>
+                        <div class="confidence-meter">
+                            <div class="meter-bar" style="width: 85%"></div>
+                            <span>AI Confidence: 85%</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="history-panel">
+                <div class="history-header">
+                    <h3>History</h3>
+                    <button id="clear-history">Clear</button>
+                </div>
+                <div id="history-list" class="history-list">
+                    <!-- History items will be added here -->
+                    <div class="empty-history">No history yet</div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
