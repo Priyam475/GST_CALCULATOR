@@ -1,12 +1,21 @@
 # Charny - Customer Churn Prediction
 
-Charny is a full-stack web application designed to predict customer churn rates using a Machine Learning model. It allows users to input customer data and receive a churn probability percentage.
+![Charny Dashboard](assets/screenshot.png)
+
+Charny is a modern, full-stack web application designed to predict customer churn rates using a Machine Learning model. It provides a sleek, user-friendly interface for inputting customer data and receiving real-time churn probability predictions.
+
+## Features
+
+*   **Real-time Prediction**: Get instant churn probability based on customer data.
+*   **Comprehensive Input Form**: detailed form covering personal details, service information, and billing preferences.
+*   **Interactive UI**: Built with React and Tailwind CSS for a responsive and modern experience.
+*   **ML-Powered Backend**: Utilizes a Scikit-learn pipeline served via Flask for accurate predictions.
 
 ## Tech Stack
 
-*   **Frontend**: React (Vite), Tailwind CSS
-*   **Backend**: Flask (Python)
-*   **Machine Learning**: Scikit-learn, Pandas, NumPy
+*   **Frontend**: React, Vite, Tailwind CSS
+*   **Backend**: Flask, Python
+*   **Machine Learning**: Scikit-learn, Pandas, NumPy, Joblib
 
 ## Prerequisites
 
@@ -63,8 +72,50 @@ npm run dev
 ```
 The frontend will run on `http://localhost:5173`.
 
+## API Reference
+
+### Predict Churn
+
+*   **URL**: `/predict`
+*   **Method**: `POST`
+*   **Content-Type**: `application/json`
+*   **Request Body**:
+    ```json
+    {
+      "gender": "Female",
+      "SeniorCitizen": 0,
+      "Partner": "Yes",
+      "Dependents": "No",
+      "tenure": 12,
+      "PhoneService": "No",
+      "MultipleLines": "No phone service",
+      "InternetService": "DSL",
+      "OnlineSecurity": "No",
+      "OnlineBackup": "Yes",
+      "DeviceProtection": "No",
+      "TechSupport": "No",
+      "StreamingTV": "No",
+      "StreamingMovies": "No",
+      "Contract": "Month-to-month",
+      "PaperlessBilling": "Yes",
+      "PaymentMethod": "Electronic check",
+      "MonthlyCharges": 29.85,
+      "TotalCharges": 29.85
+    }
+    ```
+*   **Success Response**:
+    *   **Code**: 200 OK
+    *   **Content**:
+        ```json
+        {
+          "churn_prediction": 0,
+          "churn_probability": 0.45
+        }
+        ```
+
 ## Project Structure
 
 *   `client/`: React frontend application.
 *   `server/`: Flask backend and ML model files (`model.pkl`, `scaler.pkl`).
+*   `assets/`: Project assets (screenshots, etc.).
 *   `start_app.bat`: Script to start both backend and frontend.
